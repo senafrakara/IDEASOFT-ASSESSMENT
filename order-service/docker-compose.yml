@@ -1,0 +1,30 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: order_service
+        ports:
+            - 8000:8000
+        volumes:
+            - .:/var/www/html
+        networks:
+            - app-network
+        depends_on:
+            - db
+    db:
+        image: mysql:8
+        container_name: mysql_db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: example
+            MYSQL_DATABASE: orderservice
+            MYSQL_PASSWORD: orderservice
+            MYSQL_ALLOW_EMPTY_PASSWORD: true
+        ports:
+            - 3306:3306
+        networks:
+            - app-network
+networks:
+    app-network:
+        driver: bridge
